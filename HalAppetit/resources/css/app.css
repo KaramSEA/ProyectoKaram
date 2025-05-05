@@ -1,0 +1,145 @@
+@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Aquí pones ya tu propio CSS adicional, como el que has escrito */
+
+
+
+
+      .menu-hidden {
+        transform: translateX(100%);
+        max-width: 0;
+        overflow: hidden;
+        transition: transform 0.3s ease-out, max-width 0.3s ease-out;
+      }
+
+      .menu-visible {
+        transform: translateX(0);
+        max-width: 300px;
+        transition: transform 0.3s ease-out, max-width 0.3s ease-out;
+      }
+
+      .overlay-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-out;
+      }
+
+      .overlay-visible {
+        opacity: 0.5;
+        pointer-events: all;
+        transition: opacity 0.3s ease-out;
+      }
+
+      .line {
+        position: absolute;
+        width: 28px;
+        height: 2px;
+        background-color: #fcc101;
+        border-radius: 2px;
+        left: 0;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .top-line {
+        top: 6px;
+      }
+
+      .middle-line {
+        top: 13px;
+      }
+
+      .bottom-line {
+        top: 20px;
+      }
+
+      .open .top-line {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .open .middle-line {
+        opacity: 0;
+      }
+
+      .open .bottom-line {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+      .link-animado {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.4s ease-out;
+      }
+
+      .link-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .header-animado {
+        opacity: 0;
+        transform: translateY(-40px);
+        transition: opacity 1s ease, transform 1s ease;
+      }
+
+      .header-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .no-scroll {
+        overflow: hidden !important;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+      /* Estilos para el toggle de cookies */
+      .toggle-label {
+        transition: all 0.3s ease;
+      }
+
+      .toggle-span {
+        transition: all 0.3s ease;
+      }
+
+      input:checked + .toggle-label {
+        background-color: #fcc201;
+      }
+
+      input:checked + .toggle-label .toggle-span {
+        transform: translateX(6px);
+        background-color: #1f3a5f;
+      }
+
+      /* Animaciones para el banner de cookies */
+      .cookie-slide-up {
+        animation: slideUp 0.5s ease-out forwards;
+      }
+
+      .cookie-slide-down {
+        animation: slideDown 0.5s ease-out forwards;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+      }
+    
