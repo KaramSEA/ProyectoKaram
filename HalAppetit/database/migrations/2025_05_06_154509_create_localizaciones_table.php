@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('distancia', 10, 2);
         
             $table->primary(['usuario_dni', 'restaurante_id']);
-            $table->foreign('usuario_dni')->references('dni')->on('usuarios')->onDelete('cascade');
+            $table->foreign('usuario_dni')->references('dni')->on('users')->onDelete('cascade');
             $table->foreign('restaurante_id')->references('id')->on('restaurantes')->onDelete('cascade');
         });
         

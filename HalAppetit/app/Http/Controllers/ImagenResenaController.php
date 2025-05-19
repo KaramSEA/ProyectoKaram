@@ -2,63 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImagenResena;
+use App\Models\Restaurante;
 use Illuminate\Http\Request;
 
 class ImagenResenaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function create($restauranteId)
+{
+    $restaurante = Restaurante::findOrFail($restauranteId);
+    $resenas = $restaurante->resenas;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    return view('imagenes_resenas.create', compact('restaurante', 'resenas'));
+}
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+public function store(Request $request, $restauranteId)
+{
+    $request->validate([
+        'resena_id' => 'required|exists:resenas,id',
+        'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+    $path = $request->file('imagen')->store('imagenes_resenas', 'public');
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    ImagenResena::create([
+        'resena_id' => $request->resena_id,
+        'url_imagen' => $path,
+    ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    return redirect()->route('restaurantes.show', Restaurante::findOrFail($restauranteId)->slug)->with('success', 'Imagen añadida');
+}
 }

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('foto_principal')->nullable();
             $table->string('administrador_id', 20);
             
-            $table->foreign('administrador_id')->references('dni')->on('usuarios')->onDelete('cascade');
+            $table->foreign('administrador_id')->references('dni')->on('users')->onDelete('cascade');
         });
     }
 

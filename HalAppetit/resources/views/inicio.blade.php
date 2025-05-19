@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,8 +11,16 @@
     @include('partes.header') 
 </head>
   <body class="bg-gray-100 text-gray-800 relative">
+    @if(auth()->check())
+    <span class="text-[#FCC201] font-semibold">
+        Bienvenido, {{ auth()->user()->nombre }}
+    </span>
+    @else
+    <p>no</p>
+@endif
   
     <main>
+      
     
     <section
   class="relative bg-[#0D1B2A] text-center py-40 overflow-hidden opacity-0 translate-y-10 transition-all duration-1000 ease-out"
@@ -21,6 +30,12 @@
     class="absolute inset-0 bg-cover bg-center"
     style="background-image: url('/images/coucous.jpg');"
   ></div>
+  @auth
+    
+    <span class="text-[#FCC201] font-semibold">
+        Bienvenido, {{ auth()->user()->nombre }}
+    </span>
+  @endauth
 
   <!-- Aquí directamente el contenedor del input -->
   <div class="relative z-10 flex justify-center items-center">
@@ -41,6 +56,8 @@
   </div>
 </section>
       <!-- Seccion de explora mas -->
+       
+
        
 
       

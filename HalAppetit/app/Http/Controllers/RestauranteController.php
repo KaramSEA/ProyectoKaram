@@ -19,6 +19,15 @@ class RestauranteController extends Controller
 
         return view('inicio', compact('restaurantes'));
     }
+    // esta funcion se encarga de mostrar la vista de un restaurante en especifico
+    public function show($slug)
+    {
+        $restaurante = Restaurante::with('resenas.imagenes')->where('slug', $slug)->firstOrFail();
+
+        $mediaReseñas = $restaurante->resenas->avg('puntuacion');
+
+        return view('restaurantes.show', compact('restaurante', 'mediaReseñas'));
+    }
 
 
     /**
@@ -40,9 +49,10 @@ class RestauranteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function listado()
     {
-        //
+        $restaurantes = Restaurante::all();
+        return view('restaurantes.index', compact('restaurantes'));
     }
 
     /**

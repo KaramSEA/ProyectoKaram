@@ -1,21 +1,22 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Usuario;
+
+use App\Models\User;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UsuarioSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     public function run()
     {
-        Usuario::create([
+        User::create([
             'dni' => '12345678A',
             'nombre' => 'Ahmed',
             'apellidos' => 'El Karam',
             'email' => 'ahmed@example.com',
-            'contrasena' => bcrypt('12345678'),
+            'password' => bcrypt('12345678'),
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\UserController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,7 +17,7 @@ class Resena extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'usuario_dni', 'dni');
+        return $this->belongsTo(User::class, 'usuario_dni', 'dni');
     }
 
     public function restaurante()

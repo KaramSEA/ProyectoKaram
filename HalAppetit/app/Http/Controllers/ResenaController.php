@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resena;
+use App\Models\Restaurante;
 use Illuminate\Http\Request;
 
 class ResenaController extends Controller
@@ -9,56 +11,30 @@ class ResenaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function create($restauranteId)
     {
-        //
+        $restaurante = Restaurante::findOrFail($restauranteId);
+        return view('resenas.create', compact('restaurante'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request, $restauranteId)
     {
-        //
-    }
+        $request->validate([
+            'puntuacion' => 'required|integer|min:1|max:5',
+            'comentario' => 'required|string|max:1000',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        Resena::create([
+            'restaurante_id' => $restauranteId,
+            // 'usuario_dni' => auth()->user()->dni, esto deberia de ser asi pero como no funciona el auth
+            'usuario_dni' => '12345678A', // Cambia esto por el DNI del usuario autenticado
+            'nombre_anonimo' => $request->has('anonimo') ? 'Anónimo' : null,
+            'puntuacion' => $request->puntuacion,
+            'comentario' => $request->comentario,
+            'fecha' => now(), // si estás guardando fecha manual
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('restaurantes.show', Restaurante::findOrFail($restauranteId)->slug)->with('success', 'Reseña añadida correctamente');
     }
 }

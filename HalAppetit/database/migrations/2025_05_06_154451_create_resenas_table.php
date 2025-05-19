@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('fecha')->useCurrent();
         
             $table->foreign('restaurante_id')->references('id')->on('restaurantes')->onDelete('cascade');
-            $table->foreign('usuario_dni')->references('dni')->on('usuarios')->onDelete('cascade');
+            $table->foreign('usuario_dni')->references('dni')->on('users')->onDelete('cascade');
         });
         
     }

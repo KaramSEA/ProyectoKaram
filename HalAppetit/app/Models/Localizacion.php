@@ -20,7 +20,7 @@ class Localizacion extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'usuario_dni', 'dni');
+        return $this->belongsTo(User::class, 'usuario_dni', 'dni');
     }
 
     public function restaurante()
