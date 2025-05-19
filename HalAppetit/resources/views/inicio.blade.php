@@ -40,6 +40,8 @@
     </div>
   </div>
 </section>
+      <!-- Seccion de explora mas -->
+       
 
       
       <!-- Nueva Sección Quienes Somos mejorada -->
@@ -54,7 +56,7 @@
               <span
                 class="relative inline-block opacity-0 translate-y-8 transition-all duration-700 ease-out"
               >
-                <span class="relative z-10"> Explorar </span>
+                <span class="relative z-10"> Halappetit </span>
                 <span
                   class="absolute bottom-0 left-0 w-full h-3 bg-[#FCC201]/40 -z-0 transform translate-y-1"
                 >
@@ -129,6 +131,23 @@
               </div>
             </div>
           </div>
+          <section class="bg-white py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-[#1F3A5F] mb-10 text-center">Explora Restaurantes Halal</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                @foreach($restaurantes as $restaurante)
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <img src="{{ $restaurante->foto_principal }}" alt="{{ $restaurante->nombre }}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                            <h3 class="text-xl font-bold text-[#1F3A5F] mb-2">{{ $restaurante->nombre }}</h3>
+                            <p class="text-gray-600 text-sm">{{ $restaurante->direccion }}, {{ $restaurante->ciudad }}</p>
+                            <p class="mt-2 text-sm text-gray-700">{{ Str::limit($restaurante->descripcion, 100) }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+      </section>
           <!-- Propuesta de Valor con iconos -->
           <div
             class="bg-gradient-to-r from-[#0D1B2A] to-[#1F3A5F] rounded-2xl p-12 text-white shadow-2xl opacity-0 translate-y-10 transition-all duration-1000 ease-out"
@@ -230,6 +249,9 @@
           </div>
         </div>
       </section>
+      @include('partes.footer') 
+      
+
       
 
       <!--Esta parte del codigo es todo con lo que tiene que ver las cookies-->
