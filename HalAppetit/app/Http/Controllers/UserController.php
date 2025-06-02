@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Usuario;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
 
 
 class UserController extends Controller
 {
+    use HasFactory, Notifiable;
     /**
      * Display a listing of the resource.
      */
@@ -42,15 +45,22 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        // $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
+        // if ($user && Hash::check($request->password, $user->password)) {
+        //     Auth::login($user);
+        //     $request->session()->regenerate();
+        //     return redirect()->intended(route('restaurantes.index'))->with('success', '¡Bienvenido!');
+        // }
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('restaurantes.index'))->with('success', '¡Bienvenido!');
+            return redirect()->route('inicio'); // Redirigir a courts.index
         }
 
-        return back()->with('error', 'Las credenciales no son correctas.')->withInput();
+        // return back()->with('error', 'Las credenciales no son correctas.')->withInput();
+        return back()->withErrors([
+            'email' => 'Las credenciales no coinciden con nuestros registros.',
+        ])->onlyInput('email');
     }
 
     

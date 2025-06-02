@@ -21,7 +21,7 @@
                         <div>
                             <h3 class="text-xl font-semibold text-[#1F3A5F]">{{ $restaurante->nombre }}</h3>
                             <p class="text-sm text-gray-600"><strong>Dirección:</strong> {{ $restaurante->direccion }}</p>
-                            <p class="text-sm text-gray-600"><strong>Ciudad:</strong> {{ $restaurante->ciudad }}</p>
+                            <p class="text-sm text-gray-600 ciudad"><strong>Ciudad:</strong> {{ $restaurante->ciudad }}</p>
                             <p class="text-sm text-gray-600"><strong>Tipo de cocina:</strong> {{ $restaurante->tipo_cocina }}</p>
                             <p class="text-sm text-gray-600"><strong>Teléfono:</strong> {{ $restaurante->telefono }}</p>
                             <p class="text-sm text-gray-600"><strong>Descripción:</strong> {{ Str::limit($restaurante->descripcion, 100) }}</p>
@@ -37,6 +37,17 @@
                         class="inline-block bg-yellow-400 text-[#1F3A5F] px-4 py-2 rounded hover:bg-yellow-300 transition">
                         📍 Cómo llegar
                     </button>
+
+                    @auth
+                    <form action="{{ route('favorito.toggle', $restaurante->id) }}" method="POST" class="mt-2">
+                        @csrf
+                        <button type="submit"
+                            class="text-sm px-4 py-2 rounded 
+                            {{ auth()->user()->restaurantesFavoritos->contains($restaurante->id) ? 'bg-red-200 text-red-700' : 'bg-blue-200 text-blue-700' }}">
+                            {{ auth()->user()->restaurantesFavoritos->contains($restaurante->id) ? '💔 Quitar de favoritos' : '❤️ Añadir a favoritos' }}
+                        </button>
+                    </form>
+                    @endauth
                 </div>
             </div>
         @endforeach
@@ -68,10 +79,11 @@
 
 <script>
     const restaurantes = @json($restaurantes);
-    const map = L.map('map').setView([40.416775, -3.703790], 13);
+    const map = L.map('map').setView([40.416775, -3.703790], 11); // esto es Madrid por defecto 
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // este es la capa de OpenStreetMap
+        attribution: '&copy; OpenStreetMap contributors' //
     }).addTo(map);
 
     restaurantes.forEach(r => {
@@ -86,7 +98,8 @@
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         document.querySelectorAll('.card-restaurante').forEach(card => {
             const nombre = card.querySelector('h3').textContent.toLowerCase();
-            card.style.display = nombre.includes(searchTerm) ? 'flex' : 'none';
+            const ciudad = card.querySelector('.ciudad')?.textContent.toLowerCase() || '';
+            card.style.display = (nombre.includes(searchTerm) || ciudad.includes(searchTerm)) ? 'flex' : 'none';
         });
     });
 

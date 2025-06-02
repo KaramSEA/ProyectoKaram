@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\UserController;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,11 +12,13 @@ class Resena extends Model
     protected $table = 'resenas';
     public $timestamps = false;
 
-    protected $fillable = ['restaurante_id', 'usuario_dni', 'nombre_anonimo', 'puntuacion', 'comentario', 'fecha'];
+    // CAMBIA usuario_dni por user_id
+    protected $fillable = ['restaurante_id', 'usuario_id', 'nombre_anonimo', 'puntuacion', 'comentario', 'fecha'];
 
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'usuario_dni', 'dni');
+        // CAMBIA la relación para usar user_id con users.id
+        return $this->belongsTo(User::class, 'usuario_id', 'id');
     }
 
     public function restaurante()

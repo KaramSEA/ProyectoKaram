@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
-
 class Restaurante extends Model
 {
     use HasFactory;
@@ -24,12 +23,12 @@ class Restaurante extends Model
         'descripcion',
         'telefono',
         'foto_principal',
-        'administrador_id',
+        'administrador_id', // este será un user_id ahora
     ];
 
     public function administrador()
     {
-        return $this->belongsTo(User::class, 'administrador_id', 'dni');
+        return $this->belongsTo(User::class, 'administrador_id', 'id'); // CAMBIADO: de 'dni' a 'id'
     }
 
     public function resenas()
@@ -41,9 +40,8 @@ class Restaurante extends Model
     {
         return $this->hasMany(Localizacion::class);
     }
-   
 
-    // esto se hace para que al momento de crear un restaurante se le asigne un slug automaticamente
+    // Generar slug automáticamente
     public static function boot()
     {
         parent::boot();
@@ -51,6 +49,19 @@ class Restaurante extends Model
         static::creating(function ($restaurante) {
             $restaurante->slug = Str::slug($restaurante->nombre);
         });
+    }
+    public function favoritos()
+    {
+        return $this->hasMany(\App\Models\Favorito::class);
+    }
+
+    public function usuariosQueLoTienenDeFavorito()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'favoritos');
+    }
+    public function cartas()
+    {
+        return $this->hasMany(\App\Models\Carta::class);
     }
 
 }

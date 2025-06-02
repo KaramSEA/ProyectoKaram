@@ -17,7 +17,20 @@
     </span>
     @else
     <p>no</p>
+
+    
 @endif
+@auth
+    @if(Auth::user()->email === 'admin@admin')
+        <a href="{{ route('admin.restaurantes') }}" class="flex items-center gap-2 text-[#1F3A5F] hover:text-[#FCC201]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Panel Admin
+        </a>
+    @endif
+@endauth
+
   
     <main>
       
@@ -164,6 +177,26 @@
                 @endforeach
             </div>
         </div>
+        <div class="max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold text-[#1F3A5F] mb-10 text-center mt-12">Reseñas de usuarios</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+        @foreach($ultimasResenas as $resena)
+            <div class="bg-white shadow-lg rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-[#1F3A5F] mb-2">{{ $resena->restaurante->nombre }}</h3>
+                <p class="text-sm text-gray-700 italic mb-1">Reseña de <strong>{{ $resena->usuario->nombre }}</strong></p>
+                <p class="text-sm text-gray-700 mb-2">{{ $resena->comentario }}</p>
+                <div class="text-sm text-yellow-500 mt-2">
+                    @for ($i = 0; $i < $resena->puntuacion; $i++)
+                        ★
+                    @endfor
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+
+        
       </section>
           <!-- Propuesta de Valor con iconos -->
           <div
@@ -267,201 +300,6 @@
         </div>
       </section>
       @include('partes.footer') 
-      
-
-      
-
-      <!--Esta parte del codigo es todo con lo que tiene que ver las cookies-->
-      <!-- Aviso de Cookies Mejorado -->
-      <div
-        class="fixed bottom-0 left-0 right-0 bg-[#1F3A5F] text-white p-6 hidden z-50 shadow-lg"
-        id="cookieConsent"
-      >
-        <div class="max-w-7xl mx-auto">
-          <div
-            class="flex flex-col md:flex-row justify-between items-start gap-6"
-          >
-            <div class="flex-1">
-              <h3 class="text-xl font-bold mb-3 text-[#FCC201]">
-                Preferencias de privacidad
-              </h3>
-              <p class="text-sm mb-4">
-                Utilizamos cookies y tecnologías similares en nuestro sitio web
-                y procesamos sus datos personales (como su dirección IP) para
-                personalizar contenido, integrar medios y analizar el tráfico.
-                También compartimos estos datos con terceras partes según sus
-                preferencias.
-              </p>
-              <p class="text-xs">
-                &iquest;Tiene menos de 14 años? No puede dar su consentimiento a
-                los servicios opcionales. Pida a sus padres o tutores legales
-                que acepten estos servicios por usted.
-              </p>
-            </div>
-            <div class="flex flex-col gap-3 w-full md:w-auto">
-              <div class="flex flex-col sm:flex-row gap-3">
-                <button
-                  class="bg-[#FCC201] text-[#1F3A5F] px-6 py-2 rounded-md font-medium hover:bg-[#e6b000] transition-colors whitespace-nowrap"
-                  id="acceptAllCookies"
-                >
-                  Aceptar todo
-                </button>
-                <button
-                  class="bg-transparent border border-white text-white px-6 py-2 rounded-md font-medium hover:bg-white hover:text-[#1F3A5F] transition-colors whitespace-nowrap"
-                  id="rejectAllCookies"
-                >
-                  Continuar sin aceptar
-                </button>
-              </div>
-              <button
-                class="text-[#FCC201] text-sm underline hover:no-underline text-left md:text-center"
-                id="showSettings"
-              >
-                Configurar preferencias
-              </button>
-            </div>
-          </div>
-          <!-- Configuración avanzada (oculta inicialmente) -->
-          <div
-            class="hidden mt-6 pt-6 border-t border-gray-500"
-            id="cookieSettings"
-          >
-            <h4 class="text-lg font-bold mb-4">
-              Configuración individual de cookies
-            </h4>
-            <div class="grid md:grid-cols-2 gap-6">
-              <!-- Grupo de cookies 1 -->
-              <div class="bg-[#2a4a75] p-4 rounded-lg">
-                <div class="flex justify-between items-start mb-2">
-                  <h5 class="font-bold">Cookies esenciales</h5>
-                  <div
-                    class="relative inline-block w-12 mr-2 align-middle select-none"
-                  >
-                    <input
-                      checked=""
-                      class="hidden"
-                      disabled=""
-                      id="essentialToggle"
-                      type="checkbox"
-                    />
-                    <label
-                      class="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-not-allowed"
-                      for="essentialToggle"
-                    >
-                      <span
-                        class="block h-6 w-6 rounded-full bg-[#FCC201] transform translate-x-6"
-                      >
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <p class="text-xs text-gray-300">
-                  Estas cookies son necesarias para el funcionamiento básico del
-                  sitio web y no se pueden desactivar.
-                </p>
-              </div>
-              <!-- Grupo de cookies 2 -->
-              <div class="bg-[#2a4a75] p-4 rounded-lg">
-                <div class="flex justify-between items-start mb-2">
-                  <h5 class="font-bold">Cookies de rendimiento</h5>
-                  <div
-                    class="relative inline-block w-12 mr-2 align-middle select-none"
-                  >
-                    <input
-                      class="hidden performance-cookie"
-                      id="performanceToggle"
-                      type="checkbox"
-                    />
-                    <label
-                      class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
-                      for="performanceToggle"
-                    >
-                      <span
-                        class="toggle-span block h-6 w-6 rounded-full bg-white transform"
-                      >
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <p class="text-xs text-gray-300">
-                  Nos permiten analizar el uso del sitio web y mejorar su
-                  experiencia.
-                </p>
-              </div>
-              <!-- Grupo de cookies 3 -->
-              <div class="bg-[#2a4a75] p-4 rounded-lg">
-                <div class="flex justify-between items-start mb-2">
-                  <h5 class="font-bold">Cookies de funcionalidad</h5>
-                  <div
-                    class="relative inline-block w-12 mr-2 align-middle select-none"
-                  >
-                    <input
-                      class="hidden functionality-cookie"
-                      id="functionalityToggle"
-                      type="checkbox"
-                    />
-                    <label
-                      class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
-                      for="functionalityToggle"
-                    >
-                      <span
-                        class="toggle-span block h-6 w-6 rounded-full bg-white transform"
-                      >
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <p class="text-xs text-gray-300">
-                  Permiten recordar sus preferencias y personalizar su
-                  experiencia.
-                </p>
-              </div>
-              <!-- Grupo de cookies 4 -->
-              <div class="bg-[#2a4a75] p-4 rounded-lg">
-                <div class="flex justify-between items-start mb-2">
-                  <h5 class="font-bold">Cookies de marketing</h5>
-                  <div
-                    class="relative inline-block w-12 mr-2 align-middle select-none"
-                  >
-                    <input
-                      class="hidden marketing-cookie"
-                      id="marketingToggle"
-                      type="checkbox"
-                    />
-                    <label
-                      class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
-                      for="marketingToggle"
-                    >
-                      <span
-                        class="toggle-span block h-6 w-6 rounded-full bg-white transform"
-                      >
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <p class="text-xs text-gray-300">
-                  Utilizadas por servicios de terceros para mostrar publicidad
-                  relevante.
-                </p>
-              </div>
-            </div>
-            <div class="mt-6 flex justify-between items-center">
-              <a
-                class="text-[#FCC201] text-sm underline hover:no-underline"
-                href="/politica-privacidad.html"
-              >
-                Ver política de privacidad completa
-              </a>
-              <button
-                class="bg-[#FCC201] text-[#1F3A5F] px-6 py-2 rounded-md font-medium hover:bg-[#e6b000] transition-colors"
-                id="saveSettings"
-              >
-                Guardar preferencias
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </main>
   </body>
 </html>

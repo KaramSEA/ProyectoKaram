@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('restaurantes', function (Blueprint $table) {
@@ -22,15 +19,12 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->string('telefono', 20)->nullable();
             $table->string('foto_principal')->nullable();
-            $table->string('administrador_id', 20);
-            
-            $table->foreign('administrador_id')->references('dni')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('administrador_id');
+
+            $table->foreign('administrador_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('restaurantes');

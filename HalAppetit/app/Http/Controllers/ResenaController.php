@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resena;
 use App\Models\Restaurante;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ResenaController extends Controller
 {
@@ -26,8 +27,7 @@ class ResenaController extends Controller
 
         Resena::create([
             'restaurante_id' => $restauranteId,
-            // 'usuario_dni' => auth()->user()->dni, esto deberia de ser asi pero como no funciona el auth
-            'usuario_dni' => '12345678A', // Cambia esto por el DNI del usuario autenticado
+            'usuario_id' => Auth::id(),
             'nombre_anonimo' => $request->has('anonimo') ? 'Anónimo' : null,
             'puntuacion' => $request->puntuacion,
             'comentario' => $request->comentario,

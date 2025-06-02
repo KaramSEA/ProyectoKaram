@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resena;
 use Illuminate\Http\Request;
 use App\Models\Restaurante; // Import the Restaurante model
 
@@ -15,19 +16,20 @@ class RestauranteController extends Controller
     public function index()
     {
         $restaurantes = Restaurante::take(3)->get(); // esto se hace para cargar solo 3 restaurantes
-        // $restaurantes = Restaurante::all(); // esto se hace para cargar todos los restaurantes
+        $ultimasResenas = Resena::inRandomOrder()->take(3)->get(); //  3 reseñas aleatorias
 
-        return view('inicio', compact('restaurantes'));
+        return view('inicio', compact('restaurantes', 'ultimasResenas'));
     }
     // esta funcion se encarga de mostrar la vista de un restaurante en especifico
     public function show($slug)
     {
-        $restaurante = Restaurante::with('resenas.imagenes')->where('slug', $slug)->firstOrFail();
+        $restaurante = Restaurante::with(['resenas.imagenes', 'cartas'])->where('slug', $slug)->firstOrFail();
 
         $mediaReseñas = $restaurante->resenas->avg('puntuacion');
 
         return view('restaurantes.show', compact('restaurante', 'mediaReseñas'));
     }
+
 
 
     /**

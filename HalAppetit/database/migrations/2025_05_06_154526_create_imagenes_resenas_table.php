@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('imagenes_resenas', function (Blueprint $table) {
@@ -16,15 +13,11 @@ return new class extends Migration
             $table->unsignedBigInteger('resena_id');
             $table->string('url_imagen');
             $table->string('descripcion')->nullable();
-        
+
             $table->foreign('resena_id')->references('id')->on('resenas')->onDelete('cascade');
         });
-        
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('imagenes_resenas');

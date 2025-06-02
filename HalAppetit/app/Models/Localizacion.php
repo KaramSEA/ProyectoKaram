@@ -11,16 +11,12 @@ class Localizacion extends Model
 
     protected $table = 'localizaciones';
     public $timestamps = false;
-    public $incrementing = false;
 
-    protected $primaryKey = ['usuario_dni', 'restaurante_id'];
-    protected $keyType = 'string';
-
-    protected $fillable = ['usuario_dni', 'restaurante_id', 'distancia'];
+    protected $fillable = ['user_id', 'restaurante_id', 'distancia'];
 
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'usuario_dni', 'dni');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function restaurante()
@@ -28,4 +24,3 @@ class Localizacion extends Model
         return $this->belongsTo(Restaurante::class);
     }
 }
-    
