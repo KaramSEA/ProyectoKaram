@@ -13,7 +13,7 @@
         <p>{{ count($restaurantes) }} resultados</p>
 
         @foreach($restaurantes as $index => $restaurante)
-            <div class="card-restaurante flex flex-col md:flex-row gap-4 bg-white rounded shadow p-4 {{ $index >= 4 ? 'hidden' : '' }}">
+            <div class="card-restaurante flex flex-col md:flex-row gap-4 bg-white rounded shadow p-4 opacity-0 translate-y-4 transition-all duration-700 {{ $index >= 4 ? 'hidden' : '' }}">
                 <a href="{{ route('restaurantes.show', $restaurante->slug) }}" class="flex-1 flex flex-col md:flex-row gap-4 hover:shadow-lg transition">
                     <img src="{{ $restaurante->foto_principal }}" alt="{{ $restaurante->nombre }}" class="w-full md:w-32 h-32 object-cover rounded">
 
@@ -63,7 +63,7 @@
 
     <!-- Sección derecha: Mapa sticky -->
     <div class="hidden md:block">
-        <div id="map" class="w-full h-[calc(100vh-120px)] sticky top-20 rounded shadow"></div>
+        <div id="map" class="w-full h-[calc(100vh-120px)] sticky top-20 rounded shadow opacity-0 scale-95 transition-all duration-1000"></div>
     </div>
 </div>
 @endsection
@@ -189,6 +189,23 @@
                 console.error(error);
             }
         );
+        
     }
+    window.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.card-restaurante');
+        cards.forEach((card, i) => {
+            setTimeout(() => {
+                card.classList.remove('opacity-0', 'translate-y-4');
+            }, i * 150); // tiempo escalonado por tarjeta
+        });
+
+        // Mostrar mapa con animación
+        const mapElement = document.getElementById('map');
+        if (mapElement) {
+            setTimeout(() => {
+                mapElement.classList.remove('opacity-0', 'scale-95');
+            }, 400);
+        }
+    });
 </script>
 @endsection

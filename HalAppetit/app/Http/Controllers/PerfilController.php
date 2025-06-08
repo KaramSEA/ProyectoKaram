@@ -19,11 +19,15 @@ class PerfilController extends Controller
         $user = User::find(Auth::id());
 
         $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
             'dni' => 'required|string|max:20|unique:users,dni,' . $user->id,
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
+        $user->nombre = $request->nombre;
+        $user->apellidos = $request->apellidos;
         $user->dni = $request->dni;
         $user->email = $request->email;
 

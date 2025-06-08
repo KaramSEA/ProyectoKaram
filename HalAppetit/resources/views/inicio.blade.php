@@ -1,25 +1,10 @@
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>LUCA TIC</title>
+@section('content')
 
-    @vite('resources/css/app.css')
-    @vite('resources/js/app.js')
-    @include('partes.header') 
-</head>
+
   <body class="bg-gray-100 text-gray-800 relative">
-    @if(auth()->check())
-    <span class="text-[#FCC201] font-semibold">
-        Bienvenido, {{ auth()->user()->nombre }}
-    </span>
-    @else
-    <p>no</p>
-
     
-@endif
 @auth
     @if(Auth::user()->email === 'admin@admin')
         <a href="{{ route('admin.restaurantes') }}" class="flex items-center gap-2 text-[#1F3A5F] hover:text-[#FCC201]">
@@ -56,7 +41,7 @@
       <div class="relative">
         <input 
           type="text" 
-          placeholder="Código postal, barrio de Madrid (Ej: 28005, Lavapiés, Halal...)" 
+          placeholder="Municipio, barrio de Madrid (Ej: Centro, Fuenlabrada...)" 
           class="w-full p-4 pr-16 rounded-lg border-2 border-gray-200 focus:outline-none focus:border-[#FCC201] text-[#1F3A5F] placeholder-gray-400 text-lg"
         >
         <button class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-[#FCC201] p-2 rounded-lg hover:bg-[#e6b000] transition">
@@ -299,7 +284,8 @@
           </div>
         </div>
       </section>
-      @include('partes.footer') 
+      
     </main>
   </body>
 </html>
+@endsection

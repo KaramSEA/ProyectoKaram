@@ -17,14 +17,16 @@ function toggleMenu() {
     const linksMovil = mobileMenu.querySelectorAll(".nav-link-movil");
 
     if (isHidden) {
+        // Abrir menú
         linksMovil.forEach((link, index) => {
             link.classList.remove("opacity-0", "translate-x-4");
             link.classList.add("opacity-100", "translate-x-0");
-            link.style.transitionDelay = `${index * 200}ms`;
+            link.style.transitionDelay = `${index * 100}ms`;
         });
         document.documentElement.classList.add("no-scroll");
         document.body.style.overflow = "hidden";
     } else {
+        // Cerrar menú
         linksMovil.forEach((link) => {
             link.classList.remove("opacity-100", "translate-x-0");
             link.classList.add("opacity-0", "translate-x-4");
@@ -35,35 +37,67 @@ function toggleMenu() {
     }
 }
 
+// Función para cerrar el menú
+function closeMenu() {
+    if (!mobileMenu.classList.contains("menu-hidden")) {
+        toggleMenu();
+    }
+}
+
+// Event listeners para el menú
 if (menuBtn && mobileMenu && overlay) {
     menuBtn.addEventListener("click", toggleMenu);
     overlay.addEventListener("click", toggleMenu);
 }
+
+// Cerrar menú al hacer clic en un enlace (opcional)
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileLinks = document.querySelectorAll('.nav-link-movil a, .nav-link-movil[href]');
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Pequeño delay para permitir la navegación
+            setTimeout(closeMenu, 100);
+        });
+    });
+});
+
+// Cerrar menú con tecla Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeMenu();
+    }
+});
 
 // ========= ANIMACIONES DE ENTRADA =========
 document.addEventListener("DOMContentLoaded", () => {
     // Animación del header
     const header = document.getElementById("mainHeader");
     if (header) {
-        header.classList.add("header-visible");
+        // Delay inicial para el header
+        setTimeout(() => {
+            header.classList.add("header-visible");
+        }, 100);
 
+        // Animación de los enlaces del menú desktop
         const links = document.querySelectorAll("#desktopNav .nav-link");
         links.forEach((link, index) => {
             setTimeout(() => {
                 link.classList.remove("opacity-0", "translate-y-4");
                 link.classList.add("opacity-100", "translate-y-0");
-            }, 300 + index * 150);
+            }, 500 + index * 150);
         });
     }
 
-    // Animación del hero
+    // Animación del hero section (si existe)
     const heroSection = document.getElementById("heroSection");
-    setTimeout(() => {
-        heroSection?.classList.remove("opacity-0", "translate-y-10");
-        heroSection?.classList.add("opacity-100", "translate-y-0");
-    }, 800);
+    if (heroSection) {
+        setTimeout(() => {
+            heroSection.classList.remove("opacity-0", "translate-y-10");
+            heroSection.classList.add("opacity-100", "translate-y-0");
+        }, 800);
+    }
 
-    // Animación de "Quienes Somos"
+    // Animación de "Quienes Somos" (si existe)
     setTimeout(() => {
         const quienesSomos = document.getElementById("quienesSomos");
         if (!quienesSomos) return;
@@ -116,7 +150,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1500);
 });
 
-// ========= COOKIES =========
+// ========= UTILIDADES ADICIONALES =========
+
+// Detectar cambios de orientación en móviles
+window.addEventListener('orientationchange', () => {
+    // Cerrar menú si está abierto al cambiar orientación
+    if (!mobileMenu.classList.contains("menu-hidden")) {
+        setTimeout(closeMenu, 100);
+    }
+});
+
+// Detectar cambios de tamaño de ventana
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        // Si la ventana se hace más grande que el breakpoint md, cerrar menú móvil
+        if (window.innerWidth >= 768 && !mobileMenu.classList.contains("menu-hidden")) {
+            closeMenu();
+        }
+    }, 250);
+});
+
+// ========= COOKIES (mantener funcionalidad existente) =========
 function setCookie(name, value, days) {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -143,21 +199,25 @@ function checkCookieConsent() {
     const cookieConsent = getCookie("cookieConsent");
     if (cookieConsent === "") {
         const cookieBanner = document.getElementById("cookieConsent");
-        cookieBanner.classList.remove("hidden");
-        cookieBanner.classList.add("cookie-slide-up");
-        document.documentElement.classList.add("no-scroll");
+        if (cookieBanner) {
+            cookieBanner.classList.remove("hidden");
+            cookieBanner.classList.add("cookie-slide-up");
+            document.documentElement.classList.add("no-scroll");
+        }
     }
 }
 
 function hideCookieBanner() {
     const cookieBanner = document.getElementById("cookieConsent");
-    cookieBanner.classList.remove("cookie-slide-up");
-    cookieBanner.classList.add("cookie-slide-down");
+    if (cookieBanner) {
+        cookieBanner.classList.remove("cookie-slide-up");
+        cookieBanner.classList.add("cookie-slide-down");
 
-    setTimeout(() => {
-        cookieBanner.style.display = "none";
-        document.documentElement.classList.remove("no-scroll");
-    }, 500);
+        setTimeout(() => {
+            cookieBanner.style.display = "none";
+            document.documentElement.classList.remove("no-scroll");
+        }, 500);
+    }
 }
 
 // ========= EVENTOS DE COOKIES =========
@@ -178,21 +238,30 @@ document.getElementById("rejectAllCookies")?.addEventListener("click", () => {
 });
 
 document.getElementById("showSettings")?.addEventListener("click", function() {
-    document.getElementById("cookieSettings").classList.remove("hidden");
-    this.classList.add("hidden");
+    const cookieSettings = document.getElementById("cookieSettings");
+    if (cookieSettings) {
+        cookieSettings.classList.remove("hidden");
+        this.classList.add("hidden");
+    }
 });
 
 document.getElementById("saveSettings")?.addEventListener("click", () => {
-    const performance = document.getElementById("performanceToggle").checked;
-    const functionality = document.getElementById("functionalityToggle").checked;
-    const marketing = document.getElementById("marketingToggle").checked;
+    const performanceToggle = document.getElementById("performanceToggle");
+    const functionalityToggle = document.getElementById("functionalityToggle");
+    const marketingToggle = document.getElementById("marketingToggle");
 
-    setCookie("cookieConsent", "custom", 365);
-    setCookie("performanceCookies", performance.toString(), 365);
-    setCookie("functionalityCookies", functionality.toString(), 365);
-    setCookie("marketingCookies", marketing.toString(), 365);
+    if (performanceToggle && functionalityToggle && marketingToggle) {
+        const performance = performanceToggle.checked;
+        const functionality = functionalityToggle.checked;
+        const marketing = marketingToggle.checked;
 
-    hideCookieBanner();
+        setCookie("cookieConsent", "custom", 365);
+        setCookie("performanceCookies", performance.toString(), 365);
+        setCookie("functionalityCookies", functionality.toString(), 365);
+        setCookie("marketingCookies", marketing.toString(), 365);
+
+        hideCookieBanner();
+    }
 });
 
 // ========= INICIALIZAR TOGGLES =========
@@ -201,17 +270,22 @@ function initCookieToggles() {
     const functionality = getCookie("functionalityCookies") === "true";
     const marketing = getCookie("marketingCookies") === "true";
 
-    if (document.getElementById("performanceToggle")) {
-        document.getElementById("performanceToggle").checked = performance;
+    const performanceToggle = document.getElementById("performanceToggle");
+    const functionalityToggle = document.getElementById("functionalityToggle");
+    const marketingToggle = document.getElementById("marketingToggle");
+
+    if (performanceToggle) {
+        performanceToggle.checked = performance;
     }
-    if (document.getElementById("functionalityToggle")) {
-        document.getElementById("functionalityToggle").checked = functionality;
+    if (functionalityToggle) {
+        functionalityToggle.checked = functionality;
     }
-    if (document.getElementById("marketingToggle")) {
-        document.getElementById("marketingToggle").checked = marketing;
+    if (marketingToggle) {
+        marketingToggle.checked = marketing;
     }
 }
 
+// ========= INICIALIZACIÓN =========
 window.addEventListener("load", () => {
     checkCookieConsent();
     initCookieToggles();

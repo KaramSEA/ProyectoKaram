@@ -42,7 +42,7 @@
           </a>
         </div>
         <span class="text-xs text-gray-500">
-          {{ $notification->created_at->diffForHumans() }}
+          {{ $notification->created_at->diffForHumans() }} <!-- Ejemplo: "hace 2 horas" -->
         </span>
       </div>
     @empty

@@ -11,6 +11,17 @@
     <form method="POST" action="{{ route('perfil.update') }}">
         @csrf
         @method('PUT')
+        <div class="mb-4">
+            <label class="block font-semibold">Nombre</label>
+            <input type="text" name="nombre" value="{{ old('nombre', $user->nombre) }}" class="w-full border rounded px-4 py-2">
+            @error('nombre') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold">Apellidos</label>
+            <input type="text" name="apellidos" value="{{ old('apellidos', $user->apellidos) }}" class="w-full border rounded px-4 py-2">
+            @error('apellidos') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+        </div>
 
         <div class="mb-4">
             <label class="block font-semibold">DNI</label>

@@ -7,18 +7,16 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
 
-    @include('partes.header') <!-- Aquí sigue llamando a tu header -->
+    @include('partes.header')
 
-    <main class="min-h-screen">
-        @yield('content') <!-- Aquí se inyectará tu contenido -->
+    <main class="flex-grow">
+        @yield('content')
     </main>
-
-    @yield('scripts') <!-- Aquí pondrás los scripts de cada página -->
 
     @include('partes.footer')
 
+    @yield('scripts')
 </body>
 </html>
-
